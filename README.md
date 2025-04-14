@@ -15,7 +15,7 @@ sequenceDiagram
     Bank API-->>Payroll System: Confirm payment success
     Payroll System->>Employee: Notify salary disbursed
     Payroll System->>HR Manager: Send payroll report
-
+```
 ## 🔄 Inventory Stock Alert Sequence Diagram
 
 ```mermaid
