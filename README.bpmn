@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="OrderPlacementProcess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start Order"/>
+    <bpmn:task id="Task_SelectItems" name="Select Items"/>
+    <bpmn:task id="Task_CheckStock" name="Check Stock"/>
+    <bpmn:exclusiveGateway id="Gateway_StockAvailable" name="Stock Available?"/>
+    <bpmn:task id="Task_ModifyOrder" name="Modify Order"/>
+    <bpmn:task id="Task_RecordOrder" name="Record Order"/>
+    <bpmn:task id="Task_NotifyLogistics" name="Notify Logistics"/>
+    <bpmn:endEvent id="EndEvent_OrderPlaced" name="Order Placed"/>
+
+    <!-- Flow -->
+    <bpmn:sequenceFlow id="flow1" sourceRef="StartEvent_1" targetRef="Task_SelectItems"/>
+    <bpmn:sequenceFlow id="flow2" sourceRef="Task_SelectItems" targetRef="Task_CheckStock"/>
+    <bpmn:sequenceFlow id="flow3" sourceRef="Task_CheckStock" targetRef="Gateway_StockAvailable"/>
+    <bpmn:sequenceFlow id="flow4" sourceRef="Gateway_StockAvailable" targetRef="Task_ModifyOrder" name="No"/>
+    <bpmn:sequenceFlow id="flow5" sourceRef="Gateway_StockAvailable" targetRef="Task_RecordOrder" name="Yes"/>
+    <bpmn:sequenceFlow id="flow6" sourceRef="Task_ModifyOrder" targetRef="Task_CheckStock"/>
+    <bpmn:sequenceFlow id="flow7" sourceRef="Task_RecordOrder" targetRef="Task_NotifyLogistics"/>
+    <bpmn:sequenceFlow id="flow8" sourceRef="Task_NotifyLogistics" targetRef="EndEvent_OrderPlaced"/>
+  </bpmn:process>
+</bpmn:definitions>
