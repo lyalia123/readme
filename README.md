@@ -1,38 +1,22 @@
-```mermaid
-flowchart TB
-    subgraph Presentation Layer
-        A1[Mobile App]
-        A2[Web App]
-    end
+sequenceDiagram
+    participant Doctor
+    participant MobileApp
+    participant APIGateway
+    participant EmergencyAccessService
+    participant AuthService
+    participant MedicalRecordsService
+    participant PatientDB
 
-    subgraph Application Layer
-        B1[API Gateway]
-        B2[Patient Controller]
-        B3[Appointment Controller]
-        B4[Auth Controller & Audit]
-        B5[Medical Records Controller]
-    end
-
-    subgraph Data Layer
-        C1[(Patient DB)]
-        C2[(Appointment DB)]
-        C3[(Users / Logs DB)]
-        C4[(Medical Records DB)]
-    end
-
-    A1 --> B1
-    A2 --> B1
-
-    B1 --> B2
-    B1 --> B3
-    B1 --> B4
-    B1 --> B5
-
-    B2 --> C1
-    B3 --> C2
-    B4 --> C3
-    B5 --> C4
-
-    B4 -->|OAuth2 / LDAP| Ext1[Auth Service]
-    B5 -->|FHIR / HL7| Ext2[LIS / HIS Systems]
-```
+    Doctor->>MobileApp: Login & Emergency Access Request
+    MobileApp->>APIGateway: POST /emergency-access
+    APIGateway->>AuthService: Validate JWT / Role
+    AuthService-->>APIGateway: OK
+    APIGateway->>EmergencyAccessService: Forward Emergency Request
+    EmergencyAccessService->>MedicalRecordsService: Fetch Critical Data
+    MedicalRecordsService->>PatientDB: Query Allergies, Blood Type, Medications
+    PatientDB-->>MedicalRecordsService: Return Critical Data
+    MedicalRecordsService-->>EmergencyAccessService: Data Retrieved
+    EmergencyAccessService-->>APIGateway: Return Data
+    APIGateway-->>MobileApp: Response with Emergency Data
+    MobileApp-->>Doctor: Display Critical Patient Info
+    EmergencyAccessService->>AuthService: Log Emergency Access
