@@ -1,9 +1,14 @@
+# Healthcare Patient Management System
+
+## Emergency Access Sequence Diagram
+
+```mermaid
 sequenceDiagram
     participant Doctor
     participant MobileApp
     participant APIGateway
-    participant EmergencyAccessService
     participant AuthService
+    participant EmergencyAccessService
     participant MedicalRecordsService
     participant PatientDB
 
